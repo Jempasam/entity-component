@@ -1,7 +1,7 @@
 import { eatKeyPress, isKeyPressed } from "../../controls/Keyboard.mjs";
 import { Behaviour } from "./Behaviour.mjs";
 
-export class MoveBehaviour extends Behaviour{
+export class ControlBehaviour extends Behaviour{
 
     /**
      * 
@@ -19,7 +19,7 @@ export class MoveBehaviour extends Behaviour{
     /** @override */
     init(world, objects){
         for(let obj of objects){
-            obj.observers("on_collision").add("MoveBehaviour", (v,obj1,obj2) => {
+            obj.observers("on_collision").add("ControlBehaviour", (v,obj1,obj2) => {
                 if(v[1]>0){
                     obj1.jump_count=this.jump_count
                 }
@@ -32,10 +32,10 @@ export class MoveBehaviour extends Behaviour{
         // Move
         let dx=0
         let dz=0
-        if(isKeyPressed("q")) dx+=-1
-        if(isKeyPressed("d")) dx+=1
-        if(isKeyPressed("z")) dz+=1
-        if(isKeyPressed("s")) dz+=-1
+        if(isKeyPressed("KeyA")) dx+=-1
+        if(isKeyPressed("KeyD")) dx+=1
+        if(isKeyPressed("KeyW")) dz+=1
+        if(isKeyPressed("KeyS")) dz+=-1
         let d=Math.sqrt(dx*dx+dz*dz)
         if(d){
             dx*=this.speed/d
@@ -48,7 +48,7 @@ export class MoveBehaviour extends Behaviour{
         }
 
         // Jump
-        if(eatKeyPress(" ")){
+        if(eatKeyPress("Space")){
             for(let object of objects){
                 if(object.jump_count>0){
                     let dy=Math.max(0,this.jump_strength+object.dy)
@@ -62,7 +62,7 @@ export class MoveBehaviour extends Behaviour{
     /** @override */
     finish(world, objects){
         for(let obj of objects){
-            obj.observers("on_collision").remove("MoveBehaviour")
+            obj.observers("on_collision").remove("ControlBehaviour")
         }
     }
 

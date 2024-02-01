@@ -2,11 +2,11 @@
 let keyPresseds={}
 
 document.addEventListener("keydown",(e)=>{
-    if(!keyPresseds[e.key])keyPresseds[e.key]=1
+    if(!keyPresseds[e.code])keyPresseds[e.code]=1
 })
 
 document.addEventListener("keyup",(e)=>{
-    delete keyPresseds[e.key]
+    delete keyPresseds[e.code]
 })
 
 export function isKeyPressed(code){

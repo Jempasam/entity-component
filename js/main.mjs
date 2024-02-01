@@ -10,7 +10,7 @@ import { ShapeBehaviour } from "./object/behaviour/ShapeBehaviour.mjs";
 import { BoxShape, CircleShape } from "./collision/Shape.mjs";
 import { BabylonJSDrawable } from "./drawable/BabylonJSDrawable.mjs";
 import { FrictionBehaviour } from "./object/behaviour/FrictionBehaviour.mjs";
-import { MoveBehaviour } from "./object/behaviour/MoveBehaviour.mjs";
+import { ControlBehaviour } from "./object/behaviour/ControlBehaviour.mjs";
 
 async function main() {
     // Get Display
@@ -55,7 +55,7 @@ async function main() {
     world.addBehav([PHYSICAL],new WorldLimitBehaviour(0.1))
     world.addBehav([PHYSICAL],new CollisionBehaviour())
 
-    world.addBehav([CONTROL],new MoveBehaviour(10, 200, 2))
+    world.addBehav([CONTROL],new ControlBehaviour(10, 200, 2))
 
     world.addBehav([ASPIRATOR,PHYSICAL],new AspirationBehaviour(1))
 
