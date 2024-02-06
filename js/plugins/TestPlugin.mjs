@@ -1,18 +1,18 @@
-import { BoxShape, CircleShape } from "./collision/Shape.mjs";
-import { isKeyPressed } from "./controls/Keyboard.mjs";
-import { MovementBehaviour } from "./object/behaviour/MovementBehaviour.mjs";
-import { ShapeBehaviour } from "./object/behaviour/ShapeBehaviour.mjs";
-import { CollisionBehaviour } from "./object/behaviour/collision/CollisionBehaviour.mjs";
-import { WorldLimitBehaviour } from "./object/behaviour/collision/WorldLimitBehaviour.mjs";
-import { ControlDashBehaviour } from "./object/behaviour/controls/ControlDashBehaviour.mjs";
-import { ControlJumpBehaviour } from "./object/behaviour/controls/ControlJumpBehaviour.mjs";
-import { ControlMoveBehaviour } from "./object/behaviour/controls/ControlMoveBehaviour.mjs";
-import { ControlSizeBehaviour } from "./object/behaviour/controls/ControlSizeBehaviour copy.mjs";
-import { AspirationBehaviour } from "./object/behaviour/force/AspirationBehaviour.mjs";
-import { FrictionBehaviour } from "./object/behaviour/force/FrictionBehaviour.mjs";
-import { GravityBehaviour } from "./object/behaviour/force/GravityBehaviour.mjs";
-import { PushCollisionBehaviour } from "./object/behaviour/force/PushCollisionBehaviour.mjs";
-import { Plugin } from "./object/plugin/Plugin.mjs";
+import { BoxShape, CircleShape } from "../collision/Shape.mjs";
+import { isKeyPressed } from "../controls/Keyboard.mjs";
+import { MovementBehaviour } from "../object/behaviour/MovementBehaviour.mjs";
+import { ShapeBehaviour } from "../object/behaviour/ShapeBehaviour.mjs";
+import { CollisionBehaviour } from "../object/behaviour/collision/CollisionBehaviour.mjs";
+import { WorldLimitBehaviour } from "../object/behaviour/collision/WorldLimitBehaviour.mjs";
+import { ControlDashBehaviour } from "../object/behaviour/controls/ControlDashBehaviour.mjs";
+import { ControlJumpBehaviour } from "../object/behaviour/controls/ControlJumpBehaviour.mjs";
+import { ControlMoveBehaviour } from "../object/behaviour/controls/ControlMoveBehaviour.mjs";
+import { ControlSizeBehaviour } from "../object/behaviour/controls/ControlSizeBehaviour copy.mjs";
+import { AspirationBehaviour } from "../object/behaviour/force/AspirationBehaviour.mjs";
+import { FrictionBehaviour } from "../object/behaviour/force/FrictionBehaviour.mjs";
+import { GravityBehaviour } from "../object/behaviour/force/GravityBehaviour.mjs";
+import { PushCollisionBehaviour } from "../object/behaviour/force/PushCollisionBehaviour.mjs";
+import { Plugin } from "../object/plugin/Plugin.mjs";
 
 // -- TAGS -- //
 let counter=62342
