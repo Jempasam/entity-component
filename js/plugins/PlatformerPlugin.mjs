@@ -53,7 +53,7 @@ export class PlatformerPlugin extends Plugin{
         world.addBehav([CIRCLE],new ShapeBehaviour(new CircleShape(0,0,0,1)))
         world.addBehav([SQUARE],new ShapeBehaviour(new BoxShape(0,0,0,100,100,100)))
         world.addBehav([WALL],new ShapeBehaviour(new BoxShape(0,0,0,1000,100,100)))
-        world.addBehav([GROUND],new ShapeBehaviour(new BoxShape(0,0,0,1000,200,1000)))
+        world.addBehav([GROUND],new ShapeBehaviour(new BoxShape(0,0,0,1000,400,1000)))
 
         world.addBehav([MOVING],new MovementBehaviour(0.98))
         world.addBehav([MOVING],new PushCollisionBehaviour(1))
@@ -86,9 +86,9 @@ export class PlatformerPlugin extends Plugin{
 
 
         // -- AJOUT DES OBJETS -- //
-        world.addObj([GROUND,PHYSICAL,FIXED],{x:5000,y:9500,z:5000,size:10_000,color:GREEN})
-        world.addObj([GROUND,PHYSICAL,FIXED],{x:7000,y:8000,z:7000,size:6000,color:GREEN})
-        world.addObj([GROUND,PHYSICAL,FIXED],{x:8000,y:7000,z:8000,size:4000,color:GREEN})
+        world.addObj([GROUND,PHYSICAL,FIXED],{x:5000,y:11000,z:5000,size:10_000,color:GREEN})
+        world.addObj([GROUND,PHYSICAL,FIXED],{x:7000,y:9000,z:7000,size:6000,color:GREEN})
+        world.addObj([GROUND,PHYSICAL,FIXED],{x:8000,y:7500,z:8000,size:4000,color:GREEN})
 
         world.addObj([GROUND,PHYSICAL,FIXED],{x:1000,y:8000,z:1000,size:2000,color:RED})
         world.addObj([GROUND,PHYSICAL,FIXED],{x:3000,y:5000,z:5000,size:2000,color:RED})
