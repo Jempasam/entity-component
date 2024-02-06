@@ -20,11 +20,10 @@ export class ShapeBehaviour extends Behaviour{
             obj.y=0
             obj.z=0
             obj.size=1
-            obj._shape=this.shape
+            obj._shape=this.shape.clone()
             obj.get_shape=()=>{
-                let shape=obj._shape.clone()
-                shape.place(obj.x,obj.y,obj.z,obj.size)
-                return shape
+                obj._shape.place(obj.x,obj.y,obj.z,obj.size)
+                return obj._shape
             }
         }
     }

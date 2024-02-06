@@ -169,48 +169,56 @@ export class AABB{
         let dz=Math.abs(oz)
         let d=Math.sqrt(dx**2+dy**2+dz**2)
         
-        // Nearest point of the box to the sphere
-        let nx,ny,nz
-        if(dx>this.width/2){
-            nx=this.width/2*(ox>0 ? 1 : -1)
-        }
-        else nx=ox
-        if(dy>this.height/2){
-            ny=this.height/2*(oy>0 ? 1 : -1)
-        }
-        else ny=oy
-        if(dz>this.depth/2){
-            nz=this.depth/2*(oz>0 ? 1 : -1)
-        }
-        else nz=oz
-
-        
-        // Distance between the center of this and the border of this in the direction of sphere
-        let cdx=Math.sqrt(nx**2+ny**2+nz**2)
-        let depth=radius+cdx-d
-        // If distance between center of AABB This and center of sphere is less than cumulated radius of AABB This and sphere
-        if(radius+cdx<d)return false
-        else{
-            let ddx=dx/this.width
-            let ddy=dy/this.height
-            let ddz=dz/this.depth
-            // Penetration vector perpendicular to the cube surface
-            if(ddx>ddy){
-                if(ddz>ddx){
-                    return [0,0,oz<0 ? depth : -depth ]
-                }
-                else{
-                    return [ox<0 ? depth : -depth,0,0]
-                }
+        // Get axes of the projection
+        let bx=dx/this.width
+        let by=dy/this.height
+        let bz=dz/this.depth
+        let divider
+        let multiplier
+        let direction_x=0
+        let direction_y=0
+        let direction_z=0
+         
+        if(bx>by){
+            if(bx>bz){
+                divider=dx
+                multiplier=this.width/2
+                direction_x=ox>0 ? -1 : 1
             }
             else{
-                if(ddz>ddy){
-                    return [0,0,oz<0 ? depth : -depth]
-                }
-                else{
-                    return [0,oy<0 ? depth : -depth,0]
-                }
+                divider=dz
+                multiplier=this.depth/2
+                direction_z=oz>0 ? -1 : 1
             }
+        }
+        else{
+            if(by>bz){
+                divider=dy
+                multiplier=this.height/2
+                direction_y=oy>0 ? -1 : 1
+            }
+            else{
+                divider=dz
+                multiplier=this.depth/2
+                direction_z=oz>0 ? -1 : 1
+            }
+        }
+
+        // Vector from the center of the box to the nearest point of the box to the sphere
+        let nx=ox*multiplier/divider
+        let ny=oy*multiplier/divider
+        let nz=oz*multiplier/divider
+        let nd=Math.sqrt(nx**2+ny**2+nz**2)
+        
+        // Minimum distance between the center of the box and the sphere
+        let cdx=radius+nd
+        let depth=cdx-d
+        // If distance between center of AABB This and center of sphere is less than cumulated radius of AABB This and sphere
+        if(depth<0){
+            return false
+        }
+        else{
+            return [direction_x*depth, direction_y*depth, direction_z*depth]
         }
     }
 }

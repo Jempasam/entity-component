@@ -141,6 +141,9 @@ export class World{
     /** @type {TaggedDict<GameObject>} */
     objects=new TaggedDict()
 
+    /** @type {GameObject[]} */
+    objects_list=[]
+
     /** @type {TaggedDict<BehaviourEntry>} */
     behaviours=new TaggedDict()
 
@@ -173,7 +176,7 @@ export class World{
      * @param {Drawable} drawable 
      */
     draw(drawable){
-        for(let object of Object.values(this.objects.dict).flat()){
+        for(let object of /** @type {any[]} */(this.objects_list)){
             if(object.get_shape){
                 let shape=object.get_shape()
                 shape.draw(
@@ -207,6 +210,7 @@ export class World{
         for(let i=0;i<c;i++){
             let object=new GameObject(this)
             this.objects.add(tags,object)
+            this.objects_list.push(object)
             addeds.push(object)
         }
 
@@ -234,6 +238,8 @@ export class World{
 
         // Remove
         this.objects.remove(object)
+        let index=this.objects_list.indexOf(object)
+        fastDelete(this.objects_list,index)
     }
 
         

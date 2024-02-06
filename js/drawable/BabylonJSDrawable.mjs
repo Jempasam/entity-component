@@ -1,7 +1,7 @@
 import { Drawable } from "./Drawable.mjs"
 import { defined } from "../lang/Utils.mjs"
 
-import "https://cdn.babylonjs.com/babylon.js"
+import "babylonjs"
 
 /**
  * @template T
@@ -14,15 +14,15 @@ class ObjectPool{
 
     /** @type {function(): T} */ #factory
 
-    /** @type {function(T)} */ #destructor
+    /** @type {function(T): void} */ #destructor
 
 
     /**
      * @param {function(): T} factory
-     * @param {function(T)} destructor
+     * @param {function(T): void} destructor
      */
     constructor(factory,destructor){
-        this.#pool=[]
+        this.#pool=new Array()
         this.#count=0
         this.#factory=factory
         this.#destructor=destructor
@@ -35,7 +35,7 @@ class ObjectPool{
         const count=this.#pool.length-this.#count
         for(let i=0; i<count; i++){
             const removed=this.#pool[this.#pool.length-1]
-            destructor(removed)
+            this.#destructor(removed)
             this.#pool.pop()
         }        
         this.#count=0
@@ -73,12 +73,12 @@ export class BabylonJSDrawable extends Drawable{
     /**
      * Create a drawable from a canvas
      * @param {HTMLCanvasElement} canvas
-     * @param {number=} [x]
-     * @param {number=} [y]
-     * @param {number=} [z]
-     * @param {number=} [width]
-     * @param {number=} [height]
-     * @param {number=} [depth]
+     * @param {number} [x]
+     * @param {number} [y]
+     * @param {number} [z]
+     * @param {number} [width]
+     * @param {number} [height]
+     * @param {number} [depth]
      */
     constructor(canvas, x, y, z, width, height, depth){
         super()
@@ -96,54 +96,64 @@ export class BabylonJSDrawable extends Drawable{
             this._depth=defined(depth)
         }
         else{
-            this.#spheres=new ObjectPool(
-                ()=>{
-                    const ret=BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 1, segments: 10}, this.scene)
-                    ret.material=new BABYLON.StandardMaterial("sphere", this.scene)
-                    return ret
-                },
-                (obj) => {
-                    obj.material.dispose()
-                    obj.dispose()
-                }
-            )
-
-            this.#boxs=new ObjectPool(
-                ()=>{
-                    const ret=BABYLON.MeshBuilder.CreateBox("box", {size: 1}, this.scene)
-                    ret.material=new BABYLON.StandardMaterial("sphere", this.scene)
-                    return ret
-                },
-                (obj) => {
-                    obj.material.dispose()
-                    obj.dispose()
-                }
-            )
-            this.x=-5
-            this.y=-5
-            this.z=-5
-            this._width=10
-            this._height=10
-            this._depth=10
+            this.x=-width/2
+            this.y=-height/2
+            this.z=-depth/2
+            this._width=width
+            this._height=height
+            this._depth=depth
 
             this.engine=new BABYLON.Engine(canvas,true)
             this.scene = new BABYLON.Scene(this.engine);
+            //this.scene.debugLayer.show();
+            
+            // -- SPHERE INSTANCE -- //
+            this.sphere=BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 1, segments: 10}, this.scene)
+            this.sphere.material=new BABYLON.StandardMaterial("sphere", this.scene)
+            this.sphere.registerInstancedBuffer("color", 3);
+            this.sphere.isVisible=false
+            this.#spheres=new ObjectPool(
+                ()=>{
+                    return this.sphere.createInstance("sphere")
+                },
+                (obj) => {
+                    obj.dispose()
+                }
+            )
+
+            // -- BOX INSTANCE -- //
+            this.box=BABYLON.MeshBuilder.CreateBox("box", {size: 1}, this.scene)
+            this.box.material=new BABYLON.StandardMaterial("box", this.scene)
+            this.box.registerInstancedBuffer("color", 3);
+            this.box.isVisible=false
+            this.#boxs=new ObjectPool(
+                ()=>{
+                    return this.box.createInstance("box")
+                },
+                (obj) => {
+                    obj.dispose()
+                }
+            )
+
+            //this.scene.debugLayer.show();
 
             // Camera
-            const camera = new BABYLON.ArcRotateCamera("cam", 0, 0, 0, new BABYLON.Vector3(0, 5, -15), this.scene);
+            const camera = new BABYLON.ArcRotateCamera("cam", 0, 0, 0, new BABYLON.Vector3(0, height/2, -depth*1.5), this.scene);
             camera.setTarget(BABYLON.Vector3.Zero());
             camera.attachControl(canvas, true);
+            const ssao = new BABYLON.SSAO2RenderingPipeline("ssao",this.scene, 0.75,[camera])
+
             
             // Light
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene);
             light.intensity = 0.7;
 
             // Our built-in 'ground' shape.
-            const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 10, height: 10}, this.scene);
-            ground.position.y=-5
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {width, height}, this.scene);
+            ground.position.y=-height/2
 
-            const back = BABYLON.MeshBuilder.CreateGround("ground", {width: 10, height: 10}, this.scene);
-            back.position.z=5
+            const back = BABYLON.MeshBuilder.CreateGround("ground", {width, height}, this.scene);
+            back.position.z=height/2
             back.rotation.x=-Math.PI/2
         }
     }
@@ -158,7 +168,7 @@ export class BabylonJSDrawable extends Drawable{
     /** @inheritdoc */
     paint(color){
         let box=this.#boxs.get()
-        box.material.diffuseColor = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255);
+        box.instancedBuffers.color = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255);
         box.position= new BABYLON.Vector3(this.x+this.width/2, -(this.y+this.height/2), this.z+this.depth/2)
         box.scaling=new BABYLON.Vector3(this.width, this.height, this.depth)
     }
@@ -166,7 +176,7 @@ export class BabylonJSDrawable extends Drawable{
     /** @inheritdoc */
     paintCircle(color) {
         let sphere=this.#spheres.get()
-        sphere.material.diffuseColor = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255);
+        sphere.instancedBuffers.color = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255);
         sphere.position= new BABYLON.Vector3(this.x+this.width/2, -(this.y+this.height/2), this.z+this.depth/2)
         sphere.scaling=new BABYLON.Vector3(this.width, this.height, this.depth)
     }

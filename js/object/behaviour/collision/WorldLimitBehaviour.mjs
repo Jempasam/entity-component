@@ -1,4 +1,4 @@
-import { Behaviour } from "./Behaviour.mjs";
+import { Behaviour } from "../Behaviour.mjs";
 
 export class WorldLimitBehaviour extends Behaviour{
 
@@ -38,7 +38,7 @@ export class WorldLimitBehaviour extends Behaviour{
             if(object.z > world.depth-object.size/2){
                 vz=world.depth-(object.z+object.size/2)
             }
-            if(vx || vy || vz)object.observers("on_collision").notify([-vx,-vy, -vz], object, null)
+            if(vx || vy || vz)object.observers("on_collision").notify([-vx,-vy, -vz], object, this)
 
         }
     }

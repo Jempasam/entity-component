@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+cache/
+
+# Dependency directories
+/.pnp/
+.pnp.js
+
+# Testing
+/coverage/
+
+# Build output
+/build/
+/dist/
+
+# Logs and debugging
+/logs/
+/debug.log
+/trace.log
+
+# Environment variables
+.env
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db

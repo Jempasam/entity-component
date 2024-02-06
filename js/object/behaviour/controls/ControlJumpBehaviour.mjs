@@ -1,17 +1,15 @@
-import { eatKeyPress, isKeyPressed } from "../../controls/Keyboard.mjs";
-import { Behaviour } from "./Behaviour.mjs";
+import { eatKeyPress, isKeyPressed } from "../../../controls/Keyboard.mjs";
+import { Behaviour } from "../Behaviour.mjs";
 
-export class ControlBehaviour extends Behaviour{
+export class ControlJumpBehaviour extends Behaviour{
 
     /**
      * 
-     * @param {number=} speed
      * @param {number=} jump_strength
      * @param {number=} jump_count
      */
-    constructor(speed=10, jump_strength=200, jump_count=2){
+    constructor(jump_strength=200, jump_count=2){
         super()
-        this.speed=speed
         this.jump_strength=jump_strength
         this.jump_count=jump_count
     }
@@ -29,24 +27,6 @@ export class ControlBehaviour extends Behaviour{
 
     /** @override */
     tick(world, objects){
-        // Move
-        let dx=0
-        let dz=0
-        if(isKeyPressed("KeyA")) dx+=-1
-        if(isKeyPressed("KeyD")) dx+=1
-        if(isKeyPressed("KeyW")) dz+=1
-        if(isKeyPressed("KeyS")) dz+=-1
-        let d=Math.sqrt(dx*dx+dz*dz)
-        if(d){
-            dx*=this.speed/d
-            dz*=this.speed/d
-
-            for(let object of objects){
-                object.dx+=dx
-                object.dz+=dz
-            }
-        }
-
         // Jump
         if(eatKeyPress("Space")){
             for(let object of objects){

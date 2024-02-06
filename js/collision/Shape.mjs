@@ -57,6 +57,8 @@ export class CircleShape extends Shape{
                 shape.aabb.testSphere(this.x, this.y, this.z, this.radius)
             case Shape.SPHERE:
                 return sphereTestSphere(this.x, this.y, this.z, this.radius, shape.x, shape.y, shape.z, shape.radius)
+            default:
+                return shape.doCollide(this)
         }
     }
 
@@ -67,6 +69,9 @@ export class CircleShape extends Shape{
                 return ret && [-ret[0], -ret[1], -ret[2]]
             case Shape.SPHERE:
                 return spherePenetrationSphere(this.x, this.y, this.z, this.radius, shape.x, shape.y, shape.z, shape.radius)
+            default:
+                const v=shape.penetration(this)
+                return v && [-v[0], -v[1], -v[2]]
         }
     }
 
@@ -79,21 +84,19 @@ export class CircleShape extends Shape{
         let tw=drawable.width/width
         let td=drawable.depth/depth
         let d=0.5+0.5/depth*this.z
-        if(this.z>0 && this.z<depth){
-            drawable.sub(
-                (this.x-this.radius)*tw,
-                (this.y-this.radius)*th,
-                (this.z-this.radius)*td,
-                this.radius*2*tw,
-                this.radius*2*th,
-                this.radius*2*td
-            ).paintCircle([
-                color[0]*d,
-                color[1]*d,
-                color[2]*d,
-                color[3]
-            ])
-        }
+        drawable.sub(
+            (this.x-this.radius)*tw,
+            (this.y-this.radius)*th,
+            (this.z-this.radius)*td,
+            this.radius*2*tw,
+            this.radius*2*th,
+            this.radius*2*td
+        ).paintCircle([
+            color[0]*d,
+            color[1]*d,
+            color[2]*d,
+            color[3]
+        ])
     }
 
     place(x,y,z,size){
@@ -145,6 +148,8 @@ export class BoxShape extends Shape{
                 this.aabb.testAABB(shape.aabb)
             case Shape.SPHERE:
                 return this.aabb.testSphere(shape.x, shape.y, shape.z, shape.radius)
+            default:
+                return shape.doCollide(this)
         }
     }
 
@@ -154,6 +159,9 @@ export class BoxShape extends Shape{
                 return this.aabb.penetrationAABB(shape.aabb)
             case Shape.SPHERE:
                 return this.aabb.penetrationSphere(shape.x, shape.y, shape.z, shape.radius)
+            default:
+                const v=shape.penetration(this)
+                return v && [-v[0], -v[1], -v[2]]
         }
     }
 
@@ -190,8 +198,8 @@ export class BoxShape extends Shape{
         let w_to_h=this.aabb.width/this.aabb.height
         let w_to_d=this.aabb.width/this.aabb.depth
         this.aabb.width=size
-        this.aabb.height=size*w_to_h
-        this.aabb.depth=size*w_to_d
+        this.aabb.height=size/w_to_h
+        this.aabb.depth=size/w_to_d
         this.aabb.x=x-this.aabb.width/2
         this.aabb.y=y-this.aabb.height/2
         this.aabb.z=z-this.aabb.depth/2
