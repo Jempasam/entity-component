@@ -9,7 +9,7 @@ import { ControlJumpBehaviour } from "../object/behaviour/controls/ControlJumpBe
 import { ControlMoveBehaviour } from "../object/behaviour/controls/ControlMoveBehaviour.mjs";
 import { ControlSizeBehaviour } from "../object/behaviour/controls/ControlSizeBehaviour copy.mjs";
 import { AspirationBehaviour } from "../object/behaviour/force/AspirationBehaviour.mjs";
-import { FrictionBehaviour } from "../object/behaviour/force/FrictionBehaviour.mjs";
+import { FrictionBehaviour } from "../object/behaviour/force/friction/FrictionBehaviour.mjs";
 import { GravityBehaviour } from "../object/behaviour/force/GravityBehaviour.mjs";
 import { PushCollisionBehaviour } from "../object/behaviour/force/PushCollisionBehaviour.mjs";
 import { Plugin } from "../object/plugin/Plugin.mjs";

@@ -1,4 +1,4 @@
-import { Behaviour } from "../Behaviour.mjs";
+import { Behaviour } from "../../Behaviour.mjs";
 
 export class FrictionBehaviour extends Behaviour{
 

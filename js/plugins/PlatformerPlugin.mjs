@@ -9,7 +9,9 @@ import { ControlJumpBehaviour } from "../object/behaviour/controls/ControlJumpBe
 import { ControlMoveBehaviour } from "../object/behaviour/controls/ControlMoveBehaviour.mjs";
 import { ControlSizeBehaviour } from "../object/behaviour/controls/ControlSizeBehaviour copy.mjs";
 import { AspirationBehaviour } from "../object/behaviour/force/AspirationBehaviour.mjs";
-import { FrictionBehaviour } from "../object/behaviour/force/FrictionBehaviour.mjs";
+import { DepthFrictionBehaviour } from "../object/behaviour/force/friction/DepthFrictionBehaviour.mjs";
+import { DirectionnalFrictionBehaviour } from "../object/behaviour/force/friction/DirectionnalFrictionBehaviour.mjs";
+import { FrictionBehaviour } from "../object/behaviour/force/friction/FrictionBehaviour.mjs";
 import { GravityBehaviour } from "../object/behaviour/force/GravityBehaviour.mjs";
 import { PushCollisionBehaviour } from "../object/behaviour/force/PushCollisionBehaviour.mjs";
 import { Plugin } from "../object/plugin/Plugin.mjs";
@@ -57,7 +59,8 @@ export class PlatformerPlugin extends Plugin{
 
         world.addBehav([MOVING],new MovementBehaviour(0.98))
         world.addBehav([MOVING],new PushCollisionBehaviour(1))
-        world.addBehav([MOVING],new FrictionBehaviour(0.9))
+        world.addBehav([MOVING],new DepthFrictionBehaviour(80))
+        world.addBehav([MOVING],new DirectionnalFrictionBehaviour(0.5))
         world.addBehav([MOVING],new GravityBehaviour(0,10,0))
 
         world.addBehav([BOUNCING],new MovementBehaviour(0.99))
